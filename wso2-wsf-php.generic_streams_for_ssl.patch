@@ -1,0 +1,147 @@
+From 8dee396e09770f2e7af1195e35c23f688b069bb7 Mon Sep 17 00:00:00 2001
+From: Peter MacKinnon <pmackinn@redhat.com>
+Date: Fri, 8 Jul 2011 17:45:07 -0400
+Subject: [PATCH] Changes to make streams "peek" so that we can introduce
+ SSL_peek
+
+---
+ .../transport/http/common/simple_http_svr_conn.c   |    2 +-
+ wsf_c/axis2c/util/include/axutil_stream.h          |   44 ++++++++++++++++++++
+ wsf_c/axis2c/util/src/stream.c                     |   21 +++++++++
+ 3 files changed, 66 insertions(+), 1 deletions(-)
+
+diff --git a/wsf_c/axis2c/src/core/transport/http/common/simple_http_svr_conn.c b/wsf_c/axis2c/src/core/transport/http/common/simple_http_svr_conn.c
+index a68c48e..958be28 100644
+--- a/wsf_c/axis2c/src/core/transport/http/common/simple_http_svr_conn.c
++++ b/wsf_c/axis2c/src/core/transport/http/common/simple_http_svr_conn.c
+@@ -421,7 +421,7 @@ axis2_simple_http_svr_conn_read_line(
+     int read = -1;
+ 
+     /* peek for 2047 characters to verify whether it contains CRLF character */
+-    while((read = axutil_stream_peek_socket(svr_conn->stream, env, tmp_buf, 2048 - 1)) > 0)
++    while((read = axutil_stream_peek(svr_conn->stream, env, tmp_buf, 2048 - 1)) > 0)
+     {
+         axis2_char_t *start = tmp_buf;
+         axis2_char_t *end = NULL;
+diff --git a/wsf_c/axis2c/util/include/axutil_stream.h b/wsf_c/axis2c/util/include/axutil_stream.h
+index 729f1e3..8b35788 100644
+--- a/wsf_c/axis2c/util/include/axutil_stream.h
++++ b/wsf_c/axis2c/util/include/axutil_stream.h
+@@ -76,6 +76,15 @@ extern "C"
+             const axutil_env_t * env,
+             int count);
+ 
++    typedef int(
++        AXIS2_CALL
++        * AXUTIL_STREAM_PEEK)(
++            axutil_stream_t * stream,
++            const axutil_env_t * env,
++            void *buffer,
++            int count);
++
++
+     struct axutil_stream
+     {
+         axutil_stream_type_t stream_type;
+@@ -130,6 +139,21 @@ extern "C"
+                 axutil_stream_t * stream,
+                 const axutil_env_t * env,
+                 int count);
++
++         /**
++         * peeks into stream
++         * @param buffer buffer into which the content is to be read
++         * @param count size of the buffer
++         * @return no: of bytes read
++         */
++        int(
++            AXIS2_CALL
++            * peek)(
++                axutil_stream_t * stream,
++                const axutil_env_t * env,
++                void *buffer,
++                size_t count);
++
+     };
+ 
+     /**
+@@ -184,6 +208,19 @@ extern "C"
+         int count);
+ 
+     /**
++    * peeks into stream
++    * @param buffer buffer into which the content is to be read
++    * @param count size of the buffer
++    * @return no: of bytes read
++    */
++    AXIS2_EXTERN int AXIS2_CALL
++    axutil_stream_peek(
++        axutil_stream_t * stream,
++        const axutil_env_t * env,
++        void *buffer,
++        int count);
++
++    /**
+      * Returns the length of the stream (applicable only to basic stream)
+      * @return Length of the buffer if its type is basic, else -1
+      * (we can't define a length of a stream unless it is just a buffer)
+@@ -285,6 +322,13 @@ extern "C"
+         const axutil_env_t * env,
+         AXUTIL_STREAM_SKIP func);
+ 
++    AXIS2_EXTERN axis2_status_t AXIS2_CALL
++    axutil_stream_set_peek(
++        axutil_stream_t * stream,
++        const axutil_env_t * env,
++        AXUTIL_STREAM_PEEK func);
++
++
+     /** @} */
+ 
+ #ifdef __cplusplus
+diff --git a/wsf_c/axis2c/util/src/stream.c b/wsf_c/axis2c/util/src/stream.c
+index 1034a03..4db5054 100644
+--- a/wsf_c/axis2c/util/src/stream.c
++++ b/wsf_c/axis2c/util/src/stream.c
+@@ -501,6 +501,7 @@ axutil_stream_create_socket(
+     stream->read = axutil_stream_read_socket;
+     stream->write = axutil_stream_write_socket;
+     stream->skip = axutil_stream_skip_socket;
++    stream->peek = axutil_stream_peek_socket;
+     stream->stream_type = AXIS2_STREAM_SOCKET;
+     stream->socket = socket;
+     stream->fp = NULL;
+@@ -689,6 +690,16 @@ axutil_stream_set_skip(
+     return AXIS2_SUCCESS;
+ }
+ 
++AXIS2_EXTERN axis2_status_t AXIS2_CALL
++axutil_stream_set_peek(
++    axutil_stream_t *stream,
++    const axutil_env_t *env,
++    AXUTIL_STREAM_PEEK func)
++{
++    stream->peek = func;
++    return AXIS2_SUCCESS;
++}
++
+ AXIS2_EXTERN int AXIS2_CALL
+ axutil_stream_read(
+     axutil_stream_t *stream,
+@@ -717,3 +728,13 @@ axutil_stream_skip(
+ {
+     return stream->skip(stream, env, count);
+ }
++
++AXIS2_EXTERN int AXIS2_CALL
++axutil_stream_peek(
++    axutil_stream_t *stream,
++    const axutil_env_t *env,
++    void *buffer,
++    int count)
++{
++    return stream->peek(stream, env, buffer, count);
++}
+-- 
+1.7.4.4
+

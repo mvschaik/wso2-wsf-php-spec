@@ -1,0 +1,278 @@
+diff -Naur wso2-wsf-php-src-2.1.0.orig/wsf_c/axis2c/Makefile.am wso2-wsf-php-src-2.1.0/wsf_c/axis2c/Makefile.am
+--- wso2-wsf-php-src-2.1.0.orig/wsf_c/axis2c/Makefile.am	2011-12-18 01:15:13.815216795 +0100
++++ wso2-wsf-php-src-2.1.0/wsf_c/axis2c/Makefile.am	2011-12-18 01:30:23.946192222 +0100
+@@ -30,6 +30,6 @@
+ 	rm -rf axis2c-bin-${PACKAGE_VERSION}-linux
+ 
+ install-data-hook:
+-	mkdir -p $(samplesdir)/src/axis2c
+-	cp -rf samples/* $(samplesdir)/src/axis2c
++	mkdir -p $(DESTDIR)/$(samplesdir)/src/axis2c
++	cp -rf samples/* $(DESTDIR)/$(samplesdir)/src/axis2c
+ 
+diff -Naur wso2-wsf-php-src-2.1.0.orig/wsf_c/axis2c/Makefile.in wso2-wsf-php-src-2.1.0/wsf_c/axis2c/Makefile.in
+--- wso2-wsf-php-src-2.1.0.orig/wsf_c/axis2c/Makefile.in	2011-12-18 01:15:13.900175800 +0100
++++ wso2-wsf-php-src-2.1.0/wsf_c/axis2c/Makefile.in	2011-12-18 01:30:23.948429759 +0100
+@@ -825,8 +825,8 @@
+ 	rm -rf axis2c-bin-${PACKAGE_VERSION}-linux
+ 
+ install-data-hook:
+-	mkdir -p $(samplesdir)/src/axis2c
+-	cp -rf samples/* $(samplesdir)/src/axis2c
++	mkdir -p $(DESTDIR)/$(samplesdir)/src/axis2c
++	cp -rf samples/* $(DESTDIR)/$(samplesdir)/src/axis2c
+ # Tell versions [3.59,3.63) of GNU make to not export all variables.
+ # Otherwise a system limit (for SysV at least) may be exceeded.
+ .NOEXPORT:
+diff -Naur wso2-wsf-php-src-2.1.0.orig/wsf_c/Makefile.am wso2-wsf-php-src-2.1.0/wsf_c/Makefile.am
+--- wso2-wsf-php-src-2.1.0.orig/wsf_c/Makefile.am	2011-12-18 01:15:13.953204871 +0100
++++ wso2-wsf-php-src-2.1.0/wsf_c/Makefile.am	2011-12-18 01:30:23.949374627 +0100
+@@ -13,13 +13,13 @@
+ 	sh build_samples.sh $(prefix)
+ 
+ install-data-hook:
+-	cp -rf docs/* $(docsdir)
+-	cp -rf examples/* $(samplesdir)
+-	rm -rf `find $(samplesdir)/ -type d -name *.svn`
+-	rm -rf `find $(samplesdir)/ -type d -name *.libs`
+-	rm -rf `find $(samplesdir)/ -type d -name *.deps`
+-	rm -rf `find $(samplesdir)/ -type f -name Makefile`
+-	rm -rf `find $(samplesdir)/ -type d -name autom4te.cache`
++	cp -rf docs/* $(DESTDIR)$(docsdir)
++	cp -rf examples/* $(DESTDIR)$(samplesdir)
++	rm -rf `find $(DESTDIR)$(samplesdir)/ -type d -name *.svn`
++	rm -rf `find $(DESTDIR)$(samplesdir)/ -type d -name *.libs`
++	rm -rf `find $(DESTDIR)$(samplesdir)/ -type d -name *.deps`
++	rm -rf `find $(DESTDIR)$(samplesdir)/ -type f -name Makefile`
++	rm -rf `find $(DESTDIR)$(samplesdir)/ -type d -name autom4te.cache`
+ 
+ EXTRA_DIST=build_samples.sh config build.bat clean.bat docs CREDITS NOTICE examples LICENSE configure.in link_samples.sh link.sh build/build_optional.bat build/optional.mk build/init.bat build/versions.in
+ 
+diff -Naur wso2-wsf-php-src-2.1.0.orig/wsf_c/Makefile.in wso2-wsf-php-src-2.1.0/wsf_c/Makefile.in
+--- wso2-wsf-php-src-2.1.0.orig/wsf_c/Makefile.in	2011-12-18 01:15:14.019214999 +0100
++++ wso2-wsf-php-src-2.1.0/wsf_c/Makefile.in	2011-12-18 01:30:23.949374627 +0100
+@@ -717,13 +717,13 @@
+ 	sh build_samples.sh $(prefix)
+ 
+ install-data-hook:
+-	cp -rf docs/* $(docsdir)
+-	cp -rf examples/* $(samplesdir)
+-	rm -rf `find $(samplesdir)/ -type d -name *.svn`
+-	rm -rf `find $(samplesdir)/ -type d -name *.libs`
+-	rm -rf `find $(samplesdir)/ -type d -name *.deps`
+-	rm -rf `find $(samplesdir)/ -type f -name Makefile`
+-	rm -rf `find $(samplesdir)/ -type d -name autom4te.cache`
++	cp -rf docs/* $(DESTDIR)$(docsdir)
++	cp -rf examples/* $(DESTDIR)$(samplesdir)
++	rm -rf `find $(DESTDIR)$(samplesdir)/ -type d -name *.svn`
++	rm -rf `find $(DESTDIR)$(samplesdir)/ -type d -name *.libs`
++	rm -rf `find $(DESTDIR)$(samplesdir)/ -type d -name *.deps`
++	rm -rf `find $(DESTDIR)$(samplesdir)/ -type f -name Makefile`
++	rm -rf `find $(DESTDIR)$(samplesdir)/ -type d -name autom4te.cache`
+ # Tell versions [3.59,3.63) of GNU make to not export all variables.
+ # Otherwise a system limit (for SysV at least) may be exceeded.
+ .NOEXPORT:
+diff -Naur wso2-wsf-php-src-2.1.0.orig/wsf_c/rampartc/samples/client/issued_token/Makefile.am wso2-wsf-php-src-2.1.0/wsf_c/rampartc/samples/client/issued_token/Makefile.am
+--- wso2-wsf-php-src-2.1.0.orig/wsf_c/rampartc/samples/client/issued_token/Makefile.am	2011-12-18 01:15:13.982211792 +0100
++++ wso2-wsf-php-src-2.1.0/wsf_c/rampartc/samples/client/issued_token/Makefile.am	2011-12-18 01:30:23.949374627 +0100
+@@ -24,4 +24,4 @@
+ EXTRA_DIST = update_n_run.sh
+ 
+ install-data-hook:
+-		cp update_n_run.sh $(prefix)/samples/bin/rampartc/issues_token_update_n_run.sh
++		cp update_n_run.sh $(DESTDIR)/$(prefix)/samples/bin/rampartc/issues_token_update_n_run.sh
+diff -Naur wso2-wsf-php-src-2.1.0.orig/wsf_c/rampartc/samples/client/issued_token/Makefile.in wso2-wsf-php-src-2.1.0/wsf_c/rampartc/samples/client/issued_token/Makefile.in
+--- wso2-wsf-php-src-2.1.0.orig/wsf_c/rampartc/samples/client/issued_token/Makefile.in	2011-12-18 01:15:13.983409235 +0100
++++ wso2-wsf-php-src-2.1.0/wsf_c/rampartc/samples/client/issued_token/Makefile.in	2011-12-18 01:30:23.949374627 +0100
+@@ -490,7 +490,7 @@
+ 
+ 
+ install-data-hook:
+-		cp update_n_run.sh $(prefix)/samples/bin/rampartc/issues_token_update_n_run.sh
++		cp update_n_run.sh $(DESTDIR)/$(prefix)/samples/bin/rampartc/issues_token_update_n_run.sh
+ # Tell versions [3.59,3.63) of GNU make to not export all variables.
+ # Otherwise a system limit (for SysV at least) may be exceeded.
+ .NOEXPORT:
+diff -Naur wso2-wsf-php-src-2.1.0.orig/wsf_c/rampartc/samples/client/saml_echo/Makefile.am wso2-wsf-php-src-2.1.0/wsf_c/rampartc/samples/client/saml_echo/Makefile.am
+--- wso2-wsf-php-src-2.1.0.orig/wsf_c/rampartc/samples/client/saml_echo/Makefile.am	2011-12-18 01:15:13.983409235 +0100
++++ wso2-wsf-php-src-2.1.0/wsf_c/rampartc/samples/client/saml_echo/Makefile.am	2011-12-18 01:30:23.951214025 +0100
+@@ -24,4 +24,4 @@
+ EXTRA_DIST = update_n_run.sh update_n_run.bat
+ 
+ install-data-hook:
+-		cp update_n_run.sh $(prefix)/samples/bin/rampartc/saml_echo_update_n_run.sh
++		cp update_n_run.sh $(DESTDIR)/$(prefix)/samples/bin/rampartc/saml_echo_update_n_run.sh
+diff -Naur wso2-wsf-php-src-2.1.0.orig/wsf_c/rampartc/samples/client/saml_echo/Makefile.in wso2-wsf-php-src-2.1.0/wsf_c/rampartc/samples/client/saml_echo/Makefile.in
+--- wso2-wsf-php-src-2.1.0.orig/wsf_c/rampartc/samples/client/saml_echo/Makefile.in	2011-12-18 01:15:13.983409235 +0100
++++ wso2-wsf-php-src-2.1.0/wsf_c/rampartc/samples/client/saml_echo/Makefile.in	2011-12-18 01:30:23.951214025 +0100
+@@ -490,7 +490,7 @@
+ 
+ 
+ install-data-hook:
+-		cp update_n_run.sh $(prefix)/samples/bin/rampartc/saml_echo_update_n_run.sh
++		cp update_n_run.sh $(DESTDIR)/$(prefix)/samples/bin/rampartc/saml_echo_update_n_run.sh
+ # Tell versions [3.59,3.63) of GNU make to not export all variables.
+ # Otherwise a system limit (for SysV at least) may be exceeded.
+ .NOEXPORT:
+diff -Naur wso2-wsf-php-src-2.1.0.orig/wsf_c/rampartc/samples/client/saml_protect/Makefile.am wso2-wsf-php-src-2.1.0/wsf_c/rampartc/samples/client/saml_protect/Makefile.am
+--- wso2-wsf-php-src-2.1.0.orig/wsf_c/rampartc/samples/client/saml_protect/Makefile.am	2011-12-18 01:15:13.989207004 +0100
++++ wso2-wsf-php-src-2.1.0/wsf_c/rampartc/samples/client/saml_protect/Makefile.am	2011-12-18 01:30:23.951214025 +0100
+@@ -24,4 +24,4 @@
+ EXTRA_DIST = update_n_run.sh update_n_run.bat
+ 
+ install-data-hook:
+-		cp update_n_run.sh $(prefix)/samples/bin/rampartc/saml_protect_update_n_run.sh
++		cp update_n_run.sh $(DESTDIR)/$(prefix)/samples/bin/rampartc/saml_protect_update_n_run.sh
+diff -Naur wso2-wsf-php-src-2.1.0.orig/wsf_c/rampartc/samples/client/saml_protect/Makefile.in wso2-wsf-php-src-2.1.0/wsf_c/rampartc/samples/client/saml_protect/Makefile.in
+--- wso2-wsf-php-src-2.1.0.orig/wsf_c/rampartc/samples/client/saml_protect/Makefile.in	2011-12-18 01:15:13.989207004 +0100
++++ wso2-wsf-php-src-2.1.0/wsf_c/rampartc/samples/client/saml_protect/Makefile.in	2011-12-18 01:30:23.951214025 +0100
+@@ -490,7 +490,7 @@
+ 
+ 
+ install-data-hook:
+-		cp update_n_run.sh $(prefix)/samples/bin/rampartc/saml_protect_update_n_run.sh
++		cp update_n_run.sh $(DESTDIR)/$(prefix)/samples/bin/rampartc/saml_protect_update_n_run.sh
+ # Tell versions [3.59,3.63) of GNU make to not export all variables.
+ # Otherwise a system limit (for SysV at least) may be exceeded.
+ .NOEXPORT:
+diff -Naur wso2-wsf-php-src-2.1.0.orig/wsf_c/rampartc/samples/Makefile.am wso2-wsf-php-src-2.1.0/wsf_c/rampartc/samples/Makefile.am
+--- wso2-wsf-php-src-2.1.0.orig/wsf_c/rampartc/samples/Makefile.am	2011-12-18 01:15:13.966200439 +0100
++++ wso2-wsf-php-src-2.1.0/wsf_c/rampartc/samples/Makefile.am	2011-12-18 01:30:23.951214025 +0100
+@@ -4,8 +4,8 @@
+ data_DATA=
+ 
+ install-data-hook:
+-	cp -rf secpolicy/* $(datadir)
+-	find $(datadir) -type d -name ".svn" | xargs rm -rf
++	cp -rf secpolicy/* $(DESTDIR)/$(datadir)
++	find $(DESTDIR)/$(datadir) -type d -name ".svn" | xargs rm -rf
+ 
+ EXTRA_DIST=secpolicy omxmlsec data ABOUT_SAMPLES build.sh
+ 
+diff -Naur wso2-wsf-php-src-2.1.0.orig/wsf_c/rampartc/samples/Makefile.in wso2-wsf-php-src-2.1.0/wsf_c/rampartc/samples/Makefile.in
+--- wso2-wsf-php-src-2.1.0.orig/wsf_c/rampartc/samples/Makefile.in	2011-12-18 01:15:13.967938704 +0100
++++ wso2-wsf-php-src-2.1.0/wsf_c/rampartc/samples/Makefile.in	2011-12-18 01:30:23.951214025 +0100
+@@ -752,8 +752,8 @@
+ 
+ 
+ install-data-hook:
+-	cp -rf secpolicy/* $(datadir)
+-	find $(datadir) -type d -name ".svn" | xargs rm -rf
++	cp -rf secpolicy/* $(DESTDIR)/$(datadir)
++	find $(DESTDIR)/$(datadir) -type d -name ".svn" | xargs rm -rf
+ # Tell versions [3.59,3.63) of GNU make to not export all variables.
+ # Otherwise a system limit (for SysV at least) may be exceeded.
+ .NOEXPORT:
+diff -Naur wso2-wsf-php-src-2.1.0.orig/wsf_c/rampartc/src/rahas/Makefile.am wso2-wsf-php-src-2.1.0/wsf_c/rampartc/src/rahas/Makefile.am
+--- wso2-wsf-php-src-2.1.0.orig/wsf_c/rampartc/src/rahas/Makefile.am	2011-12-18 01:15:14.004760705 +0100
++++ wso2-wsf-php-src-2.1.0/wsf_c/rampartc/src/rahas/Makefile.am	2011-12-18 01:30:23.951214025 +0100
+@@ -23,5 +23,5 @@
+ 			@AXIOMINC@
+ 
+ install-data-hook:
+-	mv $(prefix)/modules/rahas/rahas_module.xml $(prefix)/modules/rahas/module.xml
++	mv $(DESTDIR)/$(prefix)/modules/rahas/rahas_module.xml $(DESTDIR)/$(prefix)/modules/rahas/module.xml
+ 	
+diff -Naur wso2-wsf-php-src-2.1.0.orig/wsf_c/rampartc/src/rahas/Makefile.in wso2-wsf-php-src-2.1.0/wsf_c/rampartc/src/rahas/Makefile.in
+--- wso2-wsf-php-src-2.1.0.orig/wsf_c/rampartc/src/rahas/Makefile.in	2011-12-18 01:15:14.004760705 +0100
++++ wso2-wsf-php-src-2.1.0/wsf_c/rampartc/src/rahas/Makefile.in	2011-12-18 01:30:23.951214025 +0100
+@@ -593,7 +593,7 @@
+ 
+ 
+ install-data-hook:
+-	mv $(prefix)/modules/rahas/rahas_module.xml $(prefix)/modules/rahas/module.xml
++	mv $(DESTDIR)/$(prefix)/modules/rahas/rahas_module.xml $(DESTDIR)/$(prefix)/modules/rahas/module.xml
+ # Tell versions [3.59,3.63) of GNU make to not export all variables.
+ # Otherwise a system limit (for SysV at least) may be exceeded.
+ .NOEXPORT:
+diff -Naur wso2-wsf-php-src-2.1.0.orig/wsf_c/rampartc/src/util/Makefile.am wso2-wsf-php-src-2.1.0/wsf_c/rampartc/src/util/Makefile.am
+--- wso2-wsf-php-src-2.1.0.orig/wsf_c/rampartc/src/util/Makefile.am	2011-12-18 01:15:14.003189506 +0100
++++ wso2-wsf-php-src-2.1.0/wsf_c/rampartc/src/util/Makefile.am	2011-12-18 01:30:23.951214025 +0100
+@@ -1,6 +1,6 @@
+ TESTS =
+ 
+-prglibdir=$(prefix)/lib
++prglibdir=$(libdir)
+ 
+ prglib_LTLIBRARIES = librampart.la
+ 
+diff -Naur wso2-wsf-php-src-2.1.0.orig/wsf_c/rampartc/src/util/Makefile.in wso2-wsf-php-src-2.1.0/wsf_c/rampartc/src/util/Makefile.in
+--- wso2-wsf-php-src-2.1.0.orig/wsf_c/rampartc/src/util/Makefile.in	2011-12-18 01:15:14.003189506 +0100
++++ wso2-wsf-php-src-2.1.0/wsf_c/rampartc/src/util/Makefile.in	2011-12-18 01:30:23.953186069 +0100
+@@ -207,7 +207,7 @@
+ top_build_prefix = @top_build_prefix@
+ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+-prglibdir = $(prefix)/lib
++prglibdir = @libdir@
+ prglib_LTLIBRARIES = librampart.la
+ librampart_la_SOURCES = rampart_crypto_util.c \
+ 							rampart_util.c rampart_handler_util.c rampart_username_token.c rampart_timestamp_token.c \
+diff -Naur wso2-wsf-php-src-2.1.0.orig/wsf_c/sandesha2c/Makefile.am wso2-wsf-php-src-2.1.0/wsf_c/sandesha2c/Makefile.am
+--- wso2-wsf-php-src-2.1.0.orig/wsf_c/sandesha2c/Makefile.am	2011-12-18 01:15:14.036191809 +0100
++++ wso2-wsf-php-src-2.1.0/wsf_c/sandesha2c/Makefile.am	2011-12-18 01:30:23.953186069 +0100
+@@ -20,7 +20,7 @@
+ scripts_DATA=config/*.bat config/*.sh
+ 
+ install-data-hook:
+-	mkdir -p $(samplesdir)
+-	cp -rf samples/* $(samplesdir)
++	mkdir -p $(DESTDIR)/$(samplesdir)
++	cp -rf samples/* $(DESTDIR)/$(samplesdir)
+ 
+ 
+diff -Naur wso2-wsf-php-src-2.1.0.orig/wsf_c/sandesha2c/Makefile.in wso2-wsf-php-src-2.1.0/wsf_c/sandesha2c/Makefile.in
+--- wso2-wsf-php-src-2.1.0.orig/wsf_c/sandesha2c/Makefile.in	2011-12-18 01:15:14.045213344 +0100
++++ wso2-wsf-php-src-2.1.0/wsf_c/sandesha2c/Makefile.in	2011-12-18 01:30:23.953186069 +0100
+@@ -786,7 +786,7 @@
+ 
+ 
+ install-data-hook:
+-	mkdir -p $(samplesdir)
++	mkdir -p $(DESTDIR)/$(samplesdir)
+ 
+ # Tell versions [3.59,3.63) of GNU make to not export all variables.
+ # Otherwise a system limit (for SysV at least) may be exceeded.
+diff -Naur wso2-wsf-php-src-2.1.0.orig/wsf_c/sandesha2c/src/client/Makefile.am wso2-wsf-php-src-2.1.0/wsf_c/sandesha2c/src/client/Makefile.am
+--- wso2-wsf-php-src-2.1.0.orig/wsf_c/sandesha2c/src/client/Makefile.am	2011-12-18 01:15:14.060194894 +0100
++++ wso2-wsf-php-src-2.1.0/wsf_c/sandesha2c/src/client/Makefile.am	2011-12-18 01:30:23.954437254 +0100
+@@ -1,4 +1,4 @@
+-prglibdir=$(prefix)/lib
++prglibdir=$(libdir)
+ prglib_LTLIBRARIES = libsandesha2_client.la
+ 
+ libsandesha2_client_la_SOURCES = \
+diff -Naur wso2-wsf-php-src-2.1.0.orig/wsf_c/sandesha2c/src/client/Makefile.in wso2-wsf-php-src-2.1.0/wsf_c/sandesha2c/src/client/Makefile.in
+--- wso2-wsf-php-src-2.1.0.orig/wsf_c/sandesha2c/src/client/Makefile.in	2011-12-18 01:15:14.060194894 +0100
++++ wso2-wsf-php-src-2.1.0/wsf_c/sandesha2c/src/client/Makefile.in	2011-12-18 01:30:23.954437254 +0100
+@@ -190,7 +190,7 @@
+ top_build_prefix = @top_build_prefix@
+ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+-prglibdir = $(prefix)/lib
++prglibdir = @libdir@
+ prglib_LTLIBRARIES = libsandesha2_client.la
+ libsandesha2_client_la_SOURCES = \
+ 							sequence_report.c \
+diff -Naur wso2-wsf-php-src-2.1.0.orig/wsf_c/sandesha2c/src/core/Makefile.am wso2-wsf-php-src-2.1.0/wsf_c/sandesha2c/src/core/Makefile.am
+--- wso2-wsf-php-src-2.1.0.orig/wsf_c/sandesha2c/src/core/Makefile.am	2011-12-18 01:15:14.059202304 +0100
++++ wso2-wsf-php-src-2.1.0/wsf_c/sandesha2c/src/core/Makefile.am	2011-12-18 01:31:51.089235655 +0100
+@@ -21,5 +21,5 @@
+                         ../polling/libsandesha2_polling.la 
+ 
+ install-data-hook:
+-	cp -f $(prefix)/modules/sandesha2/libsandesha2* $(prefix)/lib/
++	cp -f $(DESTDIR)$(prefix)/modules/sandesha2/libsandesha2* $(DESTDIR)$(libdir)
+ 
+diff -Naur wso2-wsf-php-src-2.1.0.orig/wsf_c/sandesha2c/src/core/Makefile.in wso2-wsf-php-src-2.1.0/wsf_c/sandesha2c/src/core/Makefile.in
+--- wso2-wsf-php-src-2.1.0.orig/wsf_c/sandesha2c/src/core/Makefile.in	2011-12-18 01:15:14.059202304 +0100
++++ wso2-wsf-php-src-2.1.0/wsf_c/sandesha2c/src/core/Makefile.in	2011-12-18 01:31:33.486234041 +0100
+@@ -503,7 +503,7 @@
+ 
+ 
+ install-data-hook:
+-	cp -f $(prefix)/modules/sandesha2/libsandesha2* $(prefix)/lib/
++	cp -f $(DESTDIR)$(prefix)/modules/sandesha2/libsandesha2* $(DESTDIR)@libdir@
+ # Tell versions [3.59,3.63) of GNU make to not export all variables.
+ # Otherwise a system limit (for SysV at least) may be exceeded.
+ .NOEXPORT:
