@@ -7,14 +7,23 @@ Group:		Development/Tools
 License:	Apache License V2.0
 URL:		http://wso2.com/products/web-services-framework/php
 Source0:	http://dist.wso2.org/products/wsf/php/%{version}/%{name}-src-%{version}.tar.gz
+# Push DESTDIR to all installable components and allow proper setting of the
+# libary install directory from configure
+# https://wso2.org/jira/browse/WSFCPP-137
 Patch0:		wso2-wsf-php.fixbuild.patch
+# Allow definition of library path for services
+# https://issues.apache.org/jira/browse/AXIS2C-1544
 Patch1:		wso2-wsf-php.msg_rcvr_lib.patch
+# Allow shared libs to be loaded using literal filenames as well as original inferred style
+# https://issues.apache.org/jira/browse/AXIS2C-1549
 Patch2:		wso2-wsf-php.literal_lib_name.patch
+# Make stream support more complete for SSL
+# https://issues.apache.org/jira/browse/AXIS2C-1556
 Patch3:		wso2-wsf-php.generic_streams_for_ssl.patch
 BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 BuildRequires:	php-devel, openssl-devel, libxml2-devel
-Requires:	php
+Requires:	php, php-xml
 
 %description
 The WSO2 Web Services Framework for PHP is a PHP extension that delivers comprehensive WS-* based Web services support for the PHP world.
@@ -52,7 +61,6 @@ rm -f %{buildroot}%{_prefix}/NOTICE
 rm -f %{buildroot}%{_prefix}/README
 rm -f %{buildroot}%{_prefix}/AUTHORS
 rm -f %{buildroot}%{_prefix}/COPYING
-rm -f %{buildroot}%{_prefix}/axis2.xml
 
 # Remove libtool archives
 rm -f %{buildroot}%{_libdir}/*.la
@@ -65,6 +73,7 @@ rm -f %{buildroot}%{_bindir}/tools/tcpmon/tcpmon
 # Remove -devel stuff
 rm -rf %{buildroot}%{_includedir}
 rm -f %{buildroot}%{_libdir}/*.a
+rm -f %{buildroot}%{_libdir}/wso2-axis2/*/*.a
 rm -f %{buildroot}%{_libdir}/pkgconfig/axis2c.pc
 
 # Remove docs from share dir
@@ -75,6 +84,7 @@ rm -rf %{buildroot}%{_prefix}/samples
 
 # Move the modules directory
 mv %{buildroot}%{_prefix}/modules %{buildroot}%{_libdir}/wso2-axis2
+mv %{buildroot}%{_prefix}/axis2.xml %{buildroot}%{_libdir}/wso2-axis2
 
 
 %clean
