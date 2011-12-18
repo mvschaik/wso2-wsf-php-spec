@@ -1,5 +1,7 @@
 Files needed to create a wso2-wsf-php RPM for RHEL6/CentOS6.
 
+*** NOTE: Work in progress, doesn't work yet! ***
+
 Usage:
  * Create a user for package building
  * Login as this user and run 'rpmdev-setuptree'
