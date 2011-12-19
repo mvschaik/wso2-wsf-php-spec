@@ -6,6 +6,8 @@ Usage:
  * Create a user for package building
  * Login as this user and run 'rpmdev-setuptree'
  * Create a file ~/.wgetrc with 'timestamping = on' in it
+ * Remove the line '%__arch_install_post   /usr/lib/rpm/check-rpaths   
+     /usr/lib/rpm/check-buildroot' from ~/.rpmmacros
  * Copy wso2-wsf-php.spec to rpmbuild/SPECS
  * Copy patch files to rpmbuild/SOURCES
  * Download http://dist.wso2.org/products/wsf/php/2.1.0/wso2-wsf-php-src-2.1.0.tar.gz
