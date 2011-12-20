@@ -1,15 +1,26 @@
 Files needed to create a wso2-wsf-php RPM for RHEL6/CentOS6.
 
-*** NOTE: Work in progress, doesn't work yet! ***
+The resulting RPM stays as close as possible to the pristine installation from WSO2.
+By doing so, it violates a lot of packaging guidelines; a local installation of WSF/C,
+used by the PHP module, is installed in $(libdir)/php/modules/wsf_c. To be able to
+references WSF/C in this location, the module uses fixed rpaths, which is another
+violation.
+
+Differences from installation from source:
+ * The /samples directory from WSF/C is removed. It contained pre-compiled executables
+   that refer to an unavailable version of libssl, which would result in dependency
+   problems when installing the RPM.
+ * The documentation is moved from /usr/share to /usr/share/doc/<packagename>.
+ * The samples directory included in the source is also copied to the doc directory.
 
 Usage:
- * Create a user for package building
- * Login as this user and run 'rpmdev-setuptree'
- * Create a file ~/.wgetrc with 'timestamping = on' in it
- * Remove the line '%__arch_install_post   /usr/lib/rpm/check-rpaths   
-     /usr/lib/rpm/check-buildroot' from ~/.rpmmacros
- * Copy wso2-wsf-php.spec to rpmbuild/SPECS
- * Copy patch files to rpmbuild/SOURCES
- * Download http://dist.wso2.org/products/wsf/php/2.1.0/wso2-wsf-php-src-2.1.0.tar.gz
+1. Create a user for package building
+2. Login as this user and run 'rpmdev-setuptree'
+3. Create a file ~/.wgetrc with 'timestamping = on' in it
+4. Remove the line '%__arch_install_post   /usr/lib/rpm/check-rpaths
+    /usr/lib/rpm/check-buildroot' from ~/.rpmmacros
+5. Copy wso2-wsf-php.spec to rpmbuild/SPECS
+6. Copy patch files to rpmbuild/SOURCES
+7. Download http://dist.wso2.org/products/wsf/php/2.1.0/wso2-wsf-php-src-2.1.0.tar.gz
    to rpmbuild/SOURCES
- * Run rpmbuild -ba wso2-wsf-php.spec to build rpms
+8. Run rpmbuild -ba rpmbuild/SPECS/wso2-wsf-php.spec to build the rpms

@@ -37,80 +37,42 @@ With WSO2 Web Services Framework for PHP, your PHP applications can acquire ente
 %patch3 -p1
 
 %build
-%configure
+%configure --prefix=%{_libdir}/php/modules/wsf_c --libdir=%{_libdir}/php/modules/wsf_c/lib
 
-# Remove rpath
-find . -name libtool | xargs sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g'
-find . -name libtool | xargs sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g'
+# We should remove rpaths, but this would break the module. The libs are in a non-standard
+# location.
+#find . -name libtool | xargs sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g'
+#find . -name libtool | xargs sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g'
 
 make %{?_smp_mflags}
-
 
 %install
 rm -rf %{buildroot}
 make install DESTDIR=%{buildroot} INSTALL_ROOT=%{buildroot}
 
-# Remove the installed doc files.  The doc files are pulled from the build
-# directory, not buildroot
-rm -rf %{buildroot}%{_prefix}/docs
-rm -f %{buildroot}%{_prefix}/CREDITS
-rm -f %{buildroot}%{_prefix}/INSTALL
-rm -f %{buildroot}%{_prefix}/LICENSE
-rm -f %{buildroot}%{_prefix}/NEWS
-rm -f %{buildroot}%{_prefix}/NOTICE
-rm -f %{buildroot}%{_prefix}/README
-rm -f %{buildroot}%{_prefix}/AUTHORS
-rm -f %{buildroot}%{_prefix}/COPYING
-
-# Remove libtool archives
-rm -f %{buildroot}%{_libdir}/*.la
-
-# Remove axis2_http_server, tcpmon, and wsclient
+# Remove axis2_http_server
 rm -f %{buildroot}%{_bindir}/axis2_http_server
-rm -f %{buildroot}%{_bindir}/wsclient
-rm -f %{buildroot}%{_bindir}/tools/tcpmon/tcpmon
 
-# Remove -devel stuff
-rm -rf %{buildroot}%{_includedir}
-rm -f %{buildroot}%{_libdir}/*.a
-rm -f %{buildroot}%{_libdir}/wso2-axis2/*/*.a
-rm -f %{buildroot}%{_libdir}/pkgconfig/axis2c.pc
-
-# Remove docs from share dir
+# Remove docs from /usr/share
 rm -f %{buildroot}%{_datarootdir}/*
 
-# Remove samples
-rm -rf %{buildroot}%{_prefix}/samples
-
-# Move the modules directory
-mv %{buildroot}%{_prefix}/modules %{buildroot}%{_libdir}/wso2-axis2
-mv %{buildroot}%{_prefix}/axis2.xml %{buildroot}%{_libdir}/wso2-axis2
-
+# Remove samples, as they contain binaries that refer to unavailable libssl.
+rm -rf %{buildroot}%{_libdir}/php/modules/wsf_c/samples
 
 %clean
 rm -rf %{buildroot}
-
 
 %files
 %defattr(-,root,root,-)
 %doc README NEWS LICENSE NOTICE INSTALL README.INSTALL AUTHORS COPYING
 %doc samples
-%{_libdir}/libaxis2_axiom.so*
-%{_libdir}/libaxis2_engine.so*
-%{_libdir}/libaxis2_http_common.so*
-%{_libdir}/libaxis2_http_receiver.so*
-%{_libdir}/libaxis2_http_sender.so*
-%{_libdir}/libaxis2_parser.so*
-%{_libdir}/libaxis2_xpath.so*
-%{_libdir}/libaxutil.so*
-%{_libdir}/libguththila.so*
-%{_libdir}/libneethi.so*
-%{_libdir}/libneethi_util.so*
-%{_libdir}/librampart.so*
-%{_libdir}/libsandesha2.so*
-%{_libdir}/libsandesha2_client.so*
-%{_libdir}/wso2-axis2
 %{_libdir}/php/modules/wsf.so
+%{_libdir}/php/modules/wsf_c
 
 %changelog
 
+* Mon Dec 20 2011 - maarten
+- Created a working version
+
+* Sat Dec 17 2011 - maarten
+- Initial implementation
