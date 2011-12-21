@@ -59,6 +59,13 @@ rm -f %{buildroot}%{_datarootdir}/*
 # Remove samples, as they contain binaries that refer to unavailable libssl.
 rm -rf %{buildroot}%{_libdir}/php/modules/wsf_c/samples
 
+# Create config file
+mkdir -p %{buildroot}%{_sysconfdir}/php.d
+cat > %{buildroot}%{_sysconfdir}/php.d/wsf.ini  <<EOT
+; Enable wsf extension module
+extension=wsf.so
+EOT
+
 %clean
 rm -rf %{buildroot}
 
@@ -66,6 +73,7 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 %doc README NEWS LICENSE NOTICE INSTALL README.INSTALL AUTHORS COPYING
 %doc samples
+%config %{_sysconfdir}/php.d/wsf.ini
 %{_libdir}/php/modules/wsf.so
 %{_libdir}/php/modules/wsf_c
 
