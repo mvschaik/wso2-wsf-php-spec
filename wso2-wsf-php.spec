@@ -106,7 +106,10 @@ rm -rf %{buildroot}
 
 %changelog
 
-* Mon Dec 20 2011 - maarten
+* Wed Dec 21 2011 - maarten
+- Added scripts and logging
+
+* Tue Dec 20 2011 - maarten
 - Created a working version
 
 * Sat Dec 17 2011 - maarten

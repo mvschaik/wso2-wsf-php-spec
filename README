@@ -1,17 +1,22 @@
 Files needed to create a wso2-wsf-php RPM for RHEL6/CentOS6.
 
-The resulting RPM stays as close as possible to the pristine installation from WSO2.
-By doing so, it violates a lot of packaging guidelines; a local installation of WSF/C,
-used by the PHP module, is installed in $(libdir)/php/modules/wsf_c. To be able to
-references WSF/C in this location, the module uses fixed rpaths, which is another
-violation.
+The resulting RPM stays as close as possible to the pristine installation
+from WSO2. By doing so, it violates a lot of packaging guidelines; a local
+installation of WSF/C, used by the PHP module, is installed in
+$(libdir)/php/modules/wsf_c. To be able to references WSF/C in this location,
+the module uses fixed rpaths, which is another violation.
 
 Differences from installation from source:
- * The /samples directory from WSF/C is removed. It contained pre-compiled executables
-   that refer to an unavailable version of libssl, which would result in dependency
-   problems when installing the RPM.
+ * The /samples directory from WSF/C is removed. It contained pre-compiled
+   executables that refer to an unavailable version of libssl, which would
+   result in dependency problems when installing the RPM.
  * The documentation is moved from /usr/share to /usr/share/doc/<packagename>.
- * The samples directory included in the source is also copied to the doc directory.
+ * The samples directory included in the source is also copied to the doc
+   directory.
+ * The scripts are copied to /usr/share/<packagename>/scripts.
+ * Logging is configured to go to /var/log/<packagename>, level WARNING by
+   default.
+ * Configuration can be done in /etc/php.d/wsf.ini
 
 Usage:
 1. Create a user for package building
