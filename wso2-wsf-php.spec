@@ -54,16 +54,41 @@ make install DESTDIR=%{buildroot} INSTALL_ROOT=%{buildroot}
 rm -f %{buildroot}%{_bindir}/axis2_http_server
 
 # Remove docs from /usr/share
-rm -f %{buildroot}%{_datarootdir}/*
+rm -f %{buildroot}%{_datadir}/*
 
 # Remove samples, as they contain binaries that refer to unavailable libssl.
 rm -rf %{buildroot}%{_libdir}/php/modules/wsf_c/samples
+
+# Move scripts to shared dir
+mkdir -p %{buildroot}%{_datadir}/%{name}
+cp -r scripts %{buildroot}%{_datadir}/%{name}
+
+# Create log dir
+mkdir -p %{buildroot}%{_var}/log/%{name}
 
 # Create config file
 mkdir -p %{buildroot}%{_sysconfdir}/php.d
 cat > %{buildroot}%{_sysconfdir}/php.d/wsf.ini  <<EOT
 ; Enable wsf extension module
-extension=wsf.so
+extension = wsf.so
+
+; Path to WSF-scripts
+include_path = ".:%{_datadir}/%{name}/scripts"
+
+[wsf]
+wsf.home = "%{_libdir}/php/modules/wsf_c"
+wsf.log_path = "%{_var}/log/%{name}"
+; Log levels:
+; 0 - CRITICAL
+; 1 - ERROR
+; 2 - WARNING
+; 3 - INFO
+; 4 - DEBUG
+wsf.log_level = 1
+wsf.rm_db_dir = "%{_tmppath}"
+wsf.attachment_cache_dir = "%{_tmppath}"
+wsf.enable_attachment_caching = 0
+
 EOT
 
 %clean
@@ -76,6 +101,8 @@ rm -rf %{buildroot}
 %config %{_sysconfdir}/php.d/wsf.ini
 %{_libdir}/php/modules/wsf.so
 %{_libdir}/php/modules/wsf_c
+%{_datadir}/%{name}/scripts
+%{_var}/log/%{name}/
 
 %changelog
 
